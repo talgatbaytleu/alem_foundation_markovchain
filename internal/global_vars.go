@@ -20,7 +20,10 @@ var (
 		"",
 		"-p [string value] to use custom prefix. Must be contained by dictionary you've provided.(First 2 words from dictionary by default)",
 	)
-	Parsed         = IfFlagsParsed()
+	parsed       = IfFlagsParsed()
+	check_w_flag = CheckGenTextLen()
+	check_l_flag = CheckPrefixLen()
+
 	Default_prefix = InitDefaultPrefix(*Prefix_len)
 	Prefix         string
 )
@@ -43,5 +46,21 @@ func InitDefaultPrefix(prefix_len int) string {
 
 func IfFlagsParsed() bool {
 	flag.Parse()
+	return true
+}
+
+func CheckGenTextLen() bool {
+	if *Gen_text_len < 0 || *Gen_text_len > 10000 {
+		fmt.Fprintf(os.Stderr, "Error: Number of words is out of limits [1:10000]\n")
+		os.Exit(1)
+	}
+	return true
+}
+
+func CheckPrefixLen() bool {
+	if *Prefix_len <= 0 || *Prefix_len > 5 {
+		fmt.Fprintf(os.Stderr, "Error: Prefix length is out of limits [1:5]\n")
+		os.Exit(1)
+	}
 	return true
 }

@@ -3,10 +3,11 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"markov/internal"
 	"math/rand"
 	"os"
 	"strings"
+
+	"markov/internal"
 )
 
 func Markov() {
@@ -15,14 +16,6 @@ func Markov() {
 			"Markov Chain text generator.\n\nUsage:\n  markovchain [-w ,<N>] [-p <S>] [-l <N>]\n  markovchain --help\n\nOptions:\n  --help\tShow this screen.\n  -w N\tNumber of maximum words\n  -p S\tStarting prefix\n  -l N\tPrefix lenth\n",
 		)
 		os.Exit(0)
-	}
-	if *internal.Gen_text_len < 0 || *internal.Gen_text_len > 10000 {
-		fmt.Fprintf(os.Stderr, "Error: Number of words is out of limits [0:10000]\n")
-		os.Exit(1)
-	}
-	if *internal.Prefix_len < 0 || *internal.Prefix_len > 5 {
-		fmt.Fprintf(os.Stderr, "Error: Prefix length is out of limits [0:5]\n")
-		os.Exit(1)
 	}
 
 	data_map := GenerateMap()
@@ -74,16 +67,16 @@ func GenerateText(prefix string, data_map map[string][]string) {
 	var last_word string
 	var exists bool
 	var amount_of_loops int = *internal.Gen_text_len - *internal.Prefix_len
-	fmt.Print(prefix + " ")
 	for i := 0; i < amount_of_loops; i++ {
+		fmt.Print(" ")
 		_, exists = data_map[prefix]
 		if exists {
 			randomNum = rand.Intn(100) % len(data_map[prefix])
 			last_word = data_map[prefix][randomNum]
 			fmt.Print(last_word)
-			if amount_of_loops-i != 1 {
-				fmt.Print(" ")
-			}
+			// if amount_of_loops-i != 1 {
+			// 	fmt.Print(" ")
+			// }
 			prefix = strings.Join(append(strings.Split(prefix, " "), last_word)[1:], " ")
 		} else {
 			break
