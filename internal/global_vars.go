@@ -3,6 +3,8 @@ package internal
 import (
 	"flag"
 	"fmt"
+	"io"
+	"os"
 )
 
 var (
@@ -13,20 +15,26 @@ var (
 		100,
 		"-w [int value] to change generated text length (100 words by default)",
 	)
-	Prefix = flag.String(
+	Custom_prefix = flag.String(
 		"p",
 		"",
 		"-p [string value] to use custom prefix. Must be contained by dictionary you've provided.(First 2 words from dictionary by default)",
 	)
 	Parsed         = IfFlagsParsed()
 	Default_prefix = InitDefaultPrefix(*Prefix_len)
+	Prefix         string
 )
 
 func InitDefaultPrefix(prefix_len int) string {
 	var res string
 	var current_word string
+	var err error
 	for i := 0; i < prefix_len; i++ {
-		fmt.Scan(&current_word)
+		_, err = fmt.Scan(&current_word)
+		if err == io.EOF {
+			fmt.Fprintf(os.Stderr, "The length of provided text is less than prefix length\n")
+			os.Exit(1)
+		}
 		res += current_word + " "
 	}
 	res = res[:len(res)-1]
