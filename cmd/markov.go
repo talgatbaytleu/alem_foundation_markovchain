@@ -3,11 +3,10 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"markov/internal"
 	"math/rand"
 	"os"
 	"strings"
-
-	"markov/internal"
 )
 
 func Markov() {
