@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"math/rand"
 	"strings"
 
 	"markov/internal"
@@ -16,7 +17,7 @@ func Markov() {
 	}
 }
 
-func GenerateMap(prefix_len int) map[string][]string {
+func GenerateMap() map[string][]string {
 	res_map := make(map[string][]string)
 	// helper_slice := make([]string, 0)
 	var floating_prefix string = internal.Default_prefix
@@ -36,4 +37,23 @@ func GenerateMap(prefix_len int) map[string][]string {
 		)
 	}
 	return res_map
+}
+
+func GenerateText(prefix string, data_map map[string][]string) {
+	var randomNum int
+	var last_word string
+	var exists bool
+	fmt.Print(prefix + " ")
+	for i := 0; i < (*internal.Gen_text_len - *internal.Prefix_len); i++ {
+		_, exists = data_map[prefix]
+		if exists {
+			randomNum = rand.Intn(100) % len(data_map[prefix])
+			last_word = data_map[prefix][randomNum]
+			fmt.Print(last_word + " ")
+			prefix = strings.Join(append(strings.Split(prefix, " "), last_word)[1:], " ")
+		} else {
+			break
+		}
+	}
+	fmt.Println()
 }
