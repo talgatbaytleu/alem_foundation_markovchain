@@ -20,6 +20,8 @@ var (
 		"",
 		"-p [string value] to use custom prefix. Must be contained by dictionary you've provided.(First 2 words from dictionary by default)",
 	)
+
+	check_input  = IsInput()
 	parsed       = IfFlagsParsed()
 	check_w_flag = CheckGenTextLen()
 	check_l_flag = CheckPrefixLen()
@@ -60,6 +62,19 @@ func CheckGenTextLen() bool {
 func CheckPrefixLen() bool {
 	if *Prefix_len <= 0 || *Prefix_len > 5 {
 		fmt.Fprintf(os.Stderr, "Error: Prefix length is out of limits [1:5]\n")
+		os.Exit(1)
+	}
+	return true
+}
+
+func IsInput() bool {
+	file_info, err := os.Stdin.Stat()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	if file_info.Mode()&os.ModeNamedPipe == 0 {
+		fmt.Fprintln(os.Stderr, "Error: no input text!!!")
 		os.Exit(1)
 	}
 	return true
