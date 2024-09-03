@@ -48,6 +48,7 @@ func GenerateMap() map[string][]string {
 	for {
 		_, err := fmt.Scan(&last_word)
 		if err == io.EOF {
+			res_map[floating_prefix] = append(res_map[floating_prefix], "")
 			break
 		} else if err != nil {
 			fmt.Println("Error:", err)
@@ -67,6 +68,18 @@ func GenerateText(prefix string, data_map map[string][]string) {
 	var last_word string
 	var exists bool
 	var amount_of_loops int = *internal.Gen_text_len - *internal.Prefix_len
+
+	if amount_of_loops >= 0 {
+		fmt.Print(prefix)
+	} else {
+		prefix_slice := strings.Split(prefix, " ")
+		for i := 0; i < *internal.Gen_text_len; i++ {
+			fmt.Print(prefix_slice[i])
+			if i != *internal.Gen_text_len-1 {
+				fmt.Print(" ")
+			}
+		}
+	}
 	for i := 0; i < amount_of_loops; i++ {
 		fmt.Print(" ")
 		_, exists = data_map[prefix]

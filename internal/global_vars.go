@@ -53,7 +53,7 @@ func IfFlagsParsed() bool {
 
 func CheckGenTextLen() bool {
 	if *Gen_text_len < 0 || *Gen_text_len > 10000 {
-		fmt.Fprintf(os.Stderr, "Error: Number of words is out of limits [1:10000]\n")
+		fmt.Fprintf(os.Stderr, "Error: Number of words is out of limits [0:10000]\n")
 		os.Exit(1)
 	}
 	return true
